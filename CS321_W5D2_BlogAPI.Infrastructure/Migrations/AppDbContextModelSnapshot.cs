@@ -21,11 +21,14 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -39,17 +42,25 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .IsRequired();
 
                     b.Property<DateTime>("DatePublished");
 
                     b.Property<int>("PostId");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Comments");
                 });
@@ -63,11 +74,13 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Migrations
 
                     b.Property<bool>("CommentsAllowed");
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .IsRequired();
 
                     b.Property<DateTime>("DatePublished");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -242,9 +255,11 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
                     b.HasDiscriminator().HasValue("AppUser");
                 });
@@ -253,7 +268,8 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Migrations
                 {
                     b.HasOne("CS321_W5D2_BlogAPI.Core.Models.AppUser", "User")
                         .WithMany("Blogs")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CS321_W5D2_BlogAPI.Core.Models.Comment", b =>
@@ -262,6 +278,10 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CS321_W5D2_BlogAPI.Core.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("CS321_W5D2_BlogAPI.Core.Models.Post", b =>

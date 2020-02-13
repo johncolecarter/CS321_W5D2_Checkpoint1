@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.4" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="blog.db" />
+    <None Remove="Blog.db" />
+  </ItemGroup>
 </Project>
