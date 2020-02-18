@@ -41,11 +41,10 @@ namespace CS321_W5D2_BlogAPI.Controllers
         [HttpGet("/api/blogs/{blogId}/posts/{postId}")]
         public IActionResult Get(int blogId, int postId)
         {
-            var post = _postService
-                    .GetBlogPosts(blogId)
-                    .FirstOrDefault(p => p.Id == postId);
+            var post = _postService.Get(postId);
+                    
 
-            if (post == null) return null;
+            if (post == null) return NotFound();
 
             return Ok(post.ToApiModel());
         }

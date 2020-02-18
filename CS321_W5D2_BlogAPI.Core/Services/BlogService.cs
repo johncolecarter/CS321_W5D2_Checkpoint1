@@ -8,9 +8,12 @@ namespace CS321_W5D2_BlogAPI.Core.Services
     {
         private readonly IBlogRepository _blogRepository;
 
-        public BlogService(IBlogRepository blogRepository)
+        private readonly IUserService _userService;
+
+        public BlogService(IBlogRepository blogRepository, IUserService userService)
         {
             _blogRepository = blogRepository;
+            _userService = userService;
         }
 
         public Blog Add(Blog newBlog)
@@ -30,12 +33,28 @@ namespace CS321_W5D2_BlogAPI.Core.Services
 
         public void Remove(int id)
         {
-            _blogRepository.Remove(id);
+            var userId = _blogRepository.Get(id).UserId;
+
+            if(_userService.CurrentUserId == userId)
+            {
+                _blogRepository.Remove(id);
+            } else
+            {
+                throw new Exception("You can only delete your own blogs,");
+            }
         }
 
         public Blog Update(Blog updatedBlog)
         {
-            return _blogRepository.Update(updatedBlog);
+            var userId = _blogRepository.Get(updatedBlog.Id).UserId;
+
+            if(_userService.CurrentUserId == userId)
+            {
+                return _blogRepository.Update(updatedBlog);
+            } else
+            {
+                throw new Exception("You can only edit your own blogs.");
+            }
         }
     }
 }

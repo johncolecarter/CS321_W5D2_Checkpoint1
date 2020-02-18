@@ -27,10 +27,9 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
         public IEnumerable<Post> GetBlogPosts(int blogId)
         {
             return _dbContext.Posts
-                .Include(b => b.Blog.User)
-                .Include(b => b.Blog)
-                .Include(b => b.BlogId)
-                .Where(b => b.Id == blogId)
+                .Include(p => p.Blog)
+                .ThenInclude(b => b.User)
+                .Where(b => b.BlogId == blogId)
                 .ToList();
         }
 
